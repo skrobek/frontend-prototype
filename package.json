@@ -108,7 +108,7 @@
     ],
     "globals": {
       "ts-jest": {
-        "tsConfigFile": "/Users/skrobek/DEV/projects/zencargo/backoffice-chat/tsconfig.test.json"
+        "tsConfigFile": "tsconfig.test.json"
       }
     }
   },
