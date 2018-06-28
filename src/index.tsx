@@ -8,14 +8,14 @@ import registerServiceWorker from './lib/registerServiceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 
+setupAccount();
+
 ReactDOM.render(
   <App />,
   document.getElementById('root') as HTMLElement
 );
 
 registerServiceWorker();
-setupAccount();
-
 
 if ((module as any).hot) {
   (module as any).hot.accept();

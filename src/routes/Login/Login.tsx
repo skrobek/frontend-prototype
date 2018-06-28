@@ -1,43 +1,68 @@
 import * as React from 'react';
-// import { Auth } from 'aws-amplify';
-// import { Provider } from 'unstated';
+import { Component } from 'react';
+import { Subscribe } from 'unstated';
 import { Form as FormWrapper } from 'react-final-form';
 import { Button, Form } from 'reactstrap';
+import { RouteComponentProps } from 'react-router';
+import { withRouter } from 'react-router-dom';
+
+import AuthContainer from '../../containers/AuthContainer';
 
 import Input from './../../components/Form/Input/Input';
+import Loader from '../../components/Loader/Loader';
+
 import './Login.css';
 
+export interface ILoginForm {
+  username: string
+  password: string
+};
 
-class Login extends React.Component {
-  public submitForm = (values: object): void => {
-    console.log(values);
+interface ILoginFormProps extends RouteComponentProps<{}> {
+  isAuthenticated: boolean
+};
 
-    // Auth.signIn(username, password)
-    //   .then(user => console.log(user))
-    //   .catch(err => console.log(err));
-  };
+class Login extends Component<ILoginFormProps> {
+  public componentDidUpdate(prevProps): void {
+    if (this.props.isAuthenticated !== prevProps.isAuthenticated) {
+      if (this.props.isAuthenticated) {
+        this.props.history.push('/');
+      }
+    }
+  }
 
+  public submitForm = (values: ILoginForm, container: any): void => {
+    container.login(values.username, values.password);
+  }
 
   public render(): React.ReactNode {
     return (
       <div className="login">
-        <FormWrapper
-          onSubmit={this.submitForm}
-          // validate={null}
-          render={({ handleSubmit, pristine, invalid }) => (
-            <Form onSubmit={handleSubmit}>
-              <Input name="username" label="Username" type="email" />
-              <Input name="password" label="Password" type="password" />
-              <Button color="primary" type="submit" disabled={pristine || invalid}>
-                Submit
-              </Button>
-            </Form>
+        <Subscribe to={[AuthContainer]}>
+          {authContainer => (
+            <FormWrapper
+              initialValues={{ username: 'pskrobek@gmail.com', password: 'skrobek00' }}
+              onSubmit={(values: ILoginForm) => this.submitForm(values, authContainer)}
+              // validate={null}
+              render={({ handleSubmit, pristine, invalid }) => (
+                <Form onSubmit={handleSubmit}>
+                  <Input name="username" label="Username" type="email" />
+                  <Input name="password" label="Password" type="password" />
+                  <Button color="primary" type="submit" disabled={invalid || authContainer.state.requestLogin}>
+                    Submit
+                  </Button>
+                  {authContainer.state.requestLogin &&
+                    <Loader />
+                  }
+                </Form>
+              )}
+            />
           )}
-        />
+        </Subscribe>
       </div>
     );
   }
 }
 
-export default Login;
+export default withRouter(Login);
 
