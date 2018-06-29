@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { Provider } from 'unstated';
 
-import ListContainer from './ListContainer';
+import ListContainer from '../../containers/ListContainer';
 import SearchInput from './SearchInput/SearchInput';
 
 import './List.css';

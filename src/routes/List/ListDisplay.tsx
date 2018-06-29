@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { Subscribe } from 'unstated';
 
-import ListContainer from './ListContainer';
+import ListContainer from '../../containers/ListContainer';
 
 
 class ListDisplay extends React.Component {
